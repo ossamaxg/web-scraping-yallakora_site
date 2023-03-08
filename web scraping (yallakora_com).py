@@ -11,29 +11,29 @@ def main(page):
     src = page.content
     soup = BeautifulSoup(src, 'lxml')
     matches_details = []
-    champs = soup.find_all('div', {'class': 'matchCard'})
-    for i in range(len(champs)):
-        champ_title = champs[i].h2.text.strip()
-        all_matches = champs[i].find_all('div', {'class': 'teamsData'})
-
-        def get_matches_details(all_matches):
-            for j in range(len(all_matches)):
-                team_A = all_matches[j].find('div', {'class': 'teams teamA'}).p.text.strip()
-                team_B = all_matches[j].find('div', {'class': 'teams teamB'}).p.text.strip()
-                score_1 = all_matches[j].find_all('span', {'class': 'score'})[0].text.strip()
-                score_2 = all_matches[j].find_all('span', {'class': 'score'})[1].text.strip()
-                match_result = f'{score_1} - {score_2}'
+    champs = soup.find_all('div', {'class': 'matchesList'})
+    for champ in champs:
+        champ_title = champ.h2.text.strip()
+        champ_date = champ.find('div', {'class': 'date'}).text.strip()
+        matches = champ.find_all('li', {'class': 'item finish'})
+        def get_matches_details(matches):
+            for match in matches:
+                match_status = match.span.text.strip()
+                team_A = match.p.text.strip()
+                team_B = match.find('div', {'class': 'teams teamB'}).p.text.strip()
+                score_1 = match.find('span', {'class': 'score'}).text.strip()
+                score_2 = match.find_all('span', {'class': 'score'})[1].text.strip()
+                match_result = f'{score_2} - {score_1}'
                 teams = f'{team_A} - {team_B}'
-                match_time = all_matches[j].find_all('span', {'class': 'time'})[0].text.strip()
-                matches_details.append({'نوع البطولة': champ_title, 'ميعاد المباراة': match_time, 'الفرق': teams, 'النتيجة': match_result})
-        get_matches_details(all_matches)
+                match_time = match.find('span', {'class': 'time'}).text.strip()
+                matches_details.append({'عنوان البطولة': champ_title, 'مرحلة البطولة': champ_date, 'حالة المباراة': match_status, 'الفرق': teams, 'النتيجة': match_result, 'وقت المباراة': match_time})
+        get_matches_details(matches)
         keys = matches_details[0].keys()
-        with open(f'matches_details_{date.replace("/", "")}.csv', 'w') as op_file:
+        with open(f'yallakora/matches_details_{date.replace("/", "")}.csv', 'w') as op_file:
             dict_writer = csv.DictWriter(op_file, keys)
             dict_writer.writeheader()
             dict_writer.writerows(matches_details)
-
-    print('\n', 'done', '\n', time.time() - start, 'seconds')
+    print('\n done \n', time.time() - start, 'seconds')
 main(page)
 
 
