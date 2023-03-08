@@ -26,7 +26,11 @@ def main(page):
                 match_result = f'{score_2} - {score_1}'
                 teams = f'{team_A} - {team_B}'
                 match_time = match.find('span', {'class': 'time'}).text.strip()
-                matches_details.append({'عنوان البطولة': champ_title, 'مرحلة البطولة': champ_date, 'حالة المباراة': match_status, 'الفرق': teams, 'النتيجة': match_result, 'وقت المباراة': match_time})
+                try:
+                    channel = match.find('div', {'class': 'channel icon-channel'}).text.strip()
+                except:
+                    channel = '-'
+                matches_details.append({'عنوان البطولة': champ_title, 'مرحلة البطولة': champ_date, 'حالة المباراة': match_status, 'الفرق': teams, 'النتيجة': match_result, 'وقت المباراة': match_time, 'القناة': channel})
         get_matches_details(matches)
         keys = matches_details[0].keys()
         with open(f'yallakora/matches_details_{date.replace("/", "")}.csv', 'w') as op_file:
