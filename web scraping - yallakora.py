@@ -31,7 +31,7 @@ def main(page):
                 try:
                     channel = match.find('div', {'class': 'channel icon-channel'}).text.strip()
                 except:
-                    channel = '???'
+                    channel = '-'
                 matches_details.append({'رابط البطولة': champ_url, 'عنوان البطولة': champ_title, 'مرحلة البطولة': champ_date, 'رابط المباراة': match_url, 'حالة المباراة': match_status, 'الفرق': teams, 'النتيجة': match_result, 'وقت المباراة': match_time, 'القناة': channel})
         get_matches_details(matches)
         keys = matches_details[0].keys()
