@@ -1,2 +1,2 @@
 # web-scraping-yallakora.com
-extracting matches details from yallakora.com site using beautifulsoup
+extracting matches_details from yallakora.com site using beautifulsoup
